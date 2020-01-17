@@ -53,3 +53,4 @@ y4 (type int, contains the read value of the axis 'y' of the 4th accelerometer, 
 z4 (type int, contains the read value of the axis 'z' of the 4th accelerometer, mounted on the right upper-arm)
 
  
+ 
