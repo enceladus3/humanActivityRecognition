@@ -1,7 +1,7 @@
 # humanActivityRecognition
 Wearable Computing: Classification of Body Postures and Movements (PUC-Rio)
 
-==========================================================================================
+=========================================================================================
 
 Data Set Source:
 
@@ -13,7 +13,7 @@ Contact: wugulino '@' inf.puc-rio.br
 
 http://groupware.les.inf.puc-rio.br/har
 
-==========================================================================================
+=========================================================================================
 
 Abstract: A dataset with 5 classes (sitting-down, standing-up, standing, walking, and sitting) collected on 8 hours of activities of 4 healthy subjects. We also established a baseline performance index.
 
@@ -33,7 +33,7 @@ Associated Tasks: Classification
 
 Missing Values? N/A
 
-==========================================================================================
+=========================================================================================
 
 Attribute Information:
 user (text)
