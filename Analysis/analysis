@@ -1,0 +1,98 @@
+# /////////////// Random Forest /////////////// ok
+# from sklearn.model_selection import train_test_split
+# X_train, X_test, y_train, y_test = train_test_split(X, np.ravel(y), test_size=0.30, random_state=7)
+
+from sklearn.ensemble import RandomForestClassifier
+rf = RandomForestClassifier(n_estimators=100, random_state=0)
+rf.fit(X_train, y_train)
+RFscore = rf.score(X_test, y_test) * 100
+print('RF Score: {0:.3f}%'.format(RFscore))
+
+# /////////////// KNN /////////////// ok
+
+from sklearn.neighbors import KNeighborsClassifier
+neigh = KNeighborsClassifier(n_neighbors=1,algorithm = 'auto')
+neigh.fit(X_train,y_train)
+KNNscore = neigh.score(X_test, y_test) * 100
+print('KNN Score: {0:.3f}%'.format(KNNscore)) 
+
+
+
+# /////////////// KNN /////////////// ok
+# from sklearn.neighbors import KNeighborsClassifier
+# from sklearn.preprocessing import scale
+# knn = KNeighborsClassifier(n_neighbors=3,n_jobs=4)
+# def Normalization(x):
+#    return [(float(i)-min(x))/float(max(x)-min(x)) for i in x]
+
+# X_train_N=scale(X_train)
+# X_test_N=scale(X_test)
+
+
+# from sklearn.metrics import accuracy_score
+# acc = accuracy_score(y_test, y_pred) * 100 
+# print('KNN Score: {0:.3f}%'.format(acc))
+
+
+# /////////////// SVM /////////////// ok -> reduce the number of samples
+# [165633 rows x 17 columns]
+# X = X.sample(frac = 0.5) # or n = 100 
+# from sklearn.svm import SVC
+# from sklearn.preprocessing import MinMaxScaler
+# scaling = MinMaxScaler(feature_range=(-1,1)).fit(X_train)
+# create and configure model
+# svm = SVC(kernel= "linear", C=2) # gausian 
+# svm = SVC(gamma='scale')
+# X_train = scaling.transform(X_train)
+# X_test = scaling.transform(X_test)
+# svm.fit(X_train, y_train)
+# svm.score(X_test, y_test)
+
+
+
+# ///// KFOLD
+from sklearn.model_selection import KFold
+from sklearn.feature_selection import RFE # import RFE for feature selection
+
+ 
+values = X.values
+a = X.iloc[:,0:17].values
+b = X.iloc[:,17].values
+
+cv = KFold(n_splits = 4,random_state = 44, shuffle = True)
+for train_index, test_index in cv.split(X):
+    X_train, X_test = a[train_index], a[test_index]
+    y_train, y_test = b[train_index], b[test_index]
+    rf = RandomForestClassifier(n_estimators = 10, criterion = 'entropy')
+    rf.fit(X_train,y_train)
+# ///// 1 Feature selection
+    rfe = RFE(rf,1) ## 1 feature
+    rfe = rfe.fit(X_train, y_train)
+    print("RFE Forest:",rfe.score(X_test,y_test))
+    print("Forest:",rf.score(X_test,y_test))
+    neigh = KNeighborsClassifier(n_neighbors=100,algorithm = 'auto') 
+    neigh.fit(X_train,y_train)
+    print("KNN:",neigh.score(X_test,y_test))
+    neigh = KNeighborsClassifier(n_neighbors=5, algorithm = 'brute') # or auto 
+    neigh.fit(X_train,y_train) # takes a lot of time
+    print("KNN2:",neigh.score(X_test,y_test))
+    print("\n")
+             
+
+# ////// Analysis of the parameter influence
+a = X.iloc[:,0:17]  #independent columns
+b = X.iloc[:,17]                     
+from sklearn.ensemble import ExtraTreesClassifier
+import matplotlib.pyplot as plt
+model = RandomForestClassifier()
+model.fit(a,b)
+print(model.feature_importances_) #use inbuilt class feature_importances of tree based classifiers
+#plot graph of feature importances for better visualization
+feat_importances = pd.Series(model.feature_importances_, index=a.columns)
+feat_importances.nlargest(17).plot(kind='barh')
+plt.show()
+
+# Descriptive statistics
+# Summarizes the distribution of the numerical variables
+X.describe() 
+
